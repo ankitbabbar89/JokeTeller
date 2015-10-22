@@ -1,0 +1,40 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        applicationId "com.ankitb.joketeller"
+        minSdkVersion 19
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        free {
+            applicationId 'com.ankitb.joketeller.free'
+        }
+        paid{
+
+            applicationId 'com.ankitb.joketeller.paid'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    // Added for AdMob
+    compile project(':getjoke')
+    compile project(':showjoke')
+    compile 'com.android.support:appcompat-v7:23.1.0'
+    freeCompile 'com.google.android.gms:play-services-ads:8.1.0'
+    compile project(path: ':backend', configuration: 'android-endpoints')
+}
