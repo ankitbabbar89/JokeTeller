@@ -19,6 +19,7 @@ import java.io.IOException;
 public class FetchJokeTask extends AsyncTask<Context,Void,String>{
     private static MyApi myApi = null;
     private Context context;
+    private FetchJokeTaskListener listener;
     @Override
     protected String doInBackground(Context... params) {
         if(myApi == null){
@@ -43,7 +44,23 @@ public class FetchJokeTask extends AsyncTask<Context,Void,String>{
 
     @Override
     protected void onPostExecute(String result) {
+        if(this.listener != null)
+            this.listener.onComplete(result,null);
         Intent intent = new Intent(context, ShowJokeActivity.class);
         intent.putExtra("KEY_JOKE",result);
         context.startActivity(intent);    }
+
+    @Override
+    protected void onCancelled() {
+        if(listener != null)
+            listener.onComplete(null, new InterruptedException("AsyncTask cancelled"));
+    }
+
+    public void setListener(FetchJokeTaskListener listener){
+        this.listener = listener;
+    }
+
+    public static interface FetchJokeTaskListener {
+        public void onComplete(String result, Exception e) ;
+    }
 }
